@@ -19,7 +19,7 @@ public final class Loader {
 
     public static HierarchicalRegister<SimpleProperty> loadProperties(String... filePaths) throws IOException {
 
-        HierarchicalRegister.Builder<SimpleProperty> hierarchycalRegisterBuilder = new HierarchicalRegister.Builder<>();
+        HierarchicalRegister.Builder<SimpleProperty> hierarchycalRegisterBuilder = HierarchicalRegister.builder();
         int index = 0;
         for (String filePath : filePaths) {
             File file = new File(filePath);
@@ -36,7 +36,7 @@ public final class Loader {
             Properties props = new Properties();
             props.load(fileIS);
 
-            Register.Builder<SimpleProperty> register = new Register.Builder<>();
+            Register.Builder<SimpleProperty> register = Register.builder();
             for (Map.Entry<Object, Object> propEntry : props.entrySet()) {
                 register.addProperty(
                         new SimpleProperty(String.valueOf(propEntry.getKey()), String.valueOf(propEntry.getValue()))

@@ -26,7 +26,7 @@ public final class ValueParser {
     @Nonnull
     public static Register<EvaluatedProperty> evaluateProperties(@Nonnull Register<SimpleProperty> register) {
         requireNonNull(register);
-        Register.Builder<EvaluatedProperty> evaluatedRegister = new Register.Builder<>();
+        Register.Builder<EvaluatedProperty> evaluatedRegister = Register.builder();
         for (SimpleProperty simpleProperty : register) {
             String interpretedValue = findInterpretedValue(simpleProperty.getValue(), register);
             evaluatedRegister.addProperty(new EvaluatedProperty(simpleProperty, interpretedValue));

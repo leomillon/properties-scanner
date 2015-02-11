@@ -24,8 +24,13 @@ public class HierarchicalRegister<T extends Property> {
     }
 
     @Nonnull
+    public static <V extends Property> Builder<V> builder() {
+        return new Builder<>();
+    }
+
+    @Nonnull
     public Register<T> getFinalRegister() {
-        Register.Builder<T> finalRegister = new Register.Builder<>();
+        Register.Builder<T> finalRegister = Register.builder();
         for (PropFile propFile : filesOrder) {
             Register<T> currentRegister = registers.get(propFile);
             currentRegister.getProperties().forEach(finalRegister::addProperty);

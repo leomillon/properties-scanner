@@ -33,7 +33,7 @@ public class ValueParserTest {
     public void should_find_values_for_expressions() throws Exception {
 
         // Given
-        Register<SimpleProperty> register = new Register<>();
+        Register.Builder<SimpleProperty> register = Register.builder();
 
         String defaultPwdKey = "default.pwd";
         String defaultPwdValue = "my-password";
@@ -56,7 +56,7 @@ public class ValueParserTest {
         register.addProperty(prop(serviceUrlKey, serviceUrlValue));
 
         // When
-        Register<EvaluatedProperty> result = ValueParser.evaluateProperties(register);
+        Register<EvaluatedProperty> result = ValueParser.evaluateProperties(register.build());
 
         // Then
         assertThat(result)

@@ -22,6 +22,11 @@ public class Register<T extends Property> implements Iterable<T> {
         this.properties = ImmutableMap.copyOf(builder.properties);
     }
 
+    @Nonnull
+    public static <V extends Property> Builder<V> builder() {
+        return new Builder<>();
+    }
+
     @Nullable
     public T getPropertyForKey(@Nonnull String key) {
         return properties.get(key);
