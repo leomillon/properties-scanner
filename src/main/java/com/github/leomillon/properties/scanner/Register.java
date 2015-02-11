@@ -5,10 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.Objects.*;
@@ -27,9 +27,9 @@ public class Register<T extends Property> implements Iterable<T> {
         return new Builder<>();
     }
 
-    @Nullable
-    public T getPropertyForKey(@Nonnull String key) {
-        return properties.get(key);
+    @Nonnull
+    public Optional<T> getPropertyForKey(@Nonnull String key) {
+        return Optional.ofNullable(properties.get(key));
     }
 
     @Nonnull

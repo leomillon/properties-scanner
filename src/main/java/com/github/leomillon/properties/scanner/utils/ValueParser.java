@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,12 +42,11 @@ public final class ValueParser {
         }
         String interpretedValue = value;
         for (String foundPropKey : foundPropKeys) {
-            SimpleProperty foundProperty = register.getPropertyForKey(foundPropKey);
-            if (foundProperty == null) {
-                continue;
+            Optional<SimpleProperty> foundProperty = register.getPropertyForKey(foundPropKey);
+            if (foundProperty.isPresent()) {
+                String interpretedValueFound = findInterpretedValue(foundProperty.get().getValue(), register);
+                interpretedValue = interpretedValue.replaceAll("\\$\\{" + foundPropKey + "}", interpretedValueFound);
             }
-            String interpretedValueFound = findInterpretedValue(foundProperty.getValue(), register);
-            interpretedValue = interpretedValue.replaceAll("\\$\\{" + foundPropKey + "}", interpretedValueFound);
         }
         return interpretedValue;
     }
