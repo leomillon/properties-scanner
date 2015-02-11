@@ -38,6 +38,12 @@ public class HistorizedProperty implements Property {
         return key;
     }
 
+    @Nullable
+    @Override
+    public String getValue() {
+        return getLastValue();
+    }
+
     @Nonnull
     public TreeMap<PropFile, String> getHistory() {
         TreeMap<PropFile, String> orderedHistoryMap = new TreeMap<>(fileOrderComparator());

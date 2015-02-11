@@ -25,6 +25,7 @@ public class SimpleProperty implements Property {
         return key;
     }
 
+    @Override
     @Nullable
     public String getValue() {
         return value;

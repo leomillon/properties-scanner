@@ -19,14 +19,21 @@ public class EvaluatedProperty implements Property {
         this.interpretedValue = interpretedValue;
     }
 
-    @Nullable
-    public String getInterpretedValue() {
-        return interpretedValue;
-    }
-
+    @Override
     @Nonnull
     public String getKey() {
         return property.getKey();
+    }
+
+    @Nullable
+    @Override
+    public String getValue() {
+        return getInterpretedValue();
+    }
+
+    @Nullable
+    public String getInterpretedValue() {
+        return interpretedValue;
     }
 
     @Nullable
