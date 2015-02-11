@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Objects.*;
 
@@ -36,6 +37,29 @@ public class HierarchicalRegister<T extends Property> {
             currentRegister.getProperties().forEach(finalRegister::addProperty);
         }
         return finalRegister.build();
+    }
+
+    @Nonnull
+    public Register<HistorizedProperty> getHistorizedProperties() {
+        Register.Builder<HistorizedProperty> historizedPropertiesRegister = Register.builder();
+        for (T property : getFinalRegister()) {
+            String propertyKey = property.getKey();
+            historizedPropertiesRegister.addProperty(createHistorizedPropertyForKey(propertyKey));
+        }
+        return historizedPropertiesRegister.build();
+    }
+
+    @Nonnull
+    private HistorizedProperty createHistorizedPropertyForKey(String propertyKey) {
+        Map<PropFile, String> propertyValues = new HashMap<>();
+        for (Map.Entry<PropFile, Register<T>> registerEntry : registers.entrySet()) {
+            PropFile propFile = registerEntry.getKey();
+            Optional<T> propertyForKey = registerEntry.getValue().getPropertyForKey(propertyKey);
+            if (propertyForKey.isPresent()) {
+                propertyValues.put(propFile, propertyForKey.get().getValue());
+            }
+        }
+        return new HistorizedProperty(propertyKey, propertyValues, filesOrder);
     }
 
     public static class Builder<T extends Property> {

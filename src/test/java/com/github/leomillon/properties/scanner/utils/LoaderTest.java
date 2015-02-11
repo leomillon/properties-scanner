@@ -11,8 +11,8 @@ import static org.assertj.core.api.Assertions.*;
 
 public class LoaderTest {
 
-    private static final String FIRST_PROP_FILE_NAME = "simple.properties";
-    private static final String SECOND_PROP_FILE_NAME = "second_file.properties";
+    private static final String FIRST_PROP_FILE_NAME = "first.properties";
+    private static final String SECOND_PROP_FILE_NAME = "second.properties";
 
     @Test
     public void should_load_properties_from_file_paths() throws IOException {
