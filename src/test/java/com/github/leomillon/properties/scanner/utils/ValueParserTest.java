@@ -3,10 +3,9 @@ package com.github.leomillon.properties.scanner.utils;
 import com.github.leomillon.properties.scanner.EvaluatedProperty;
 import com.github.leomillon.properties.scanner.Register;
 import com.github.leomillon.properties.scanner.SimpleProperty;
+import com.github.leomillon.properties.scanner.factory.PropertiesFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import javax.annotation.Nonnull;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -33,44 +32,20 @@ public class ValueParserTest {
     public void should_find_values_for_expressions() throws Exception {
 
         // Given
-        Register.Builder<SimpleProperty> register = Register.builder();
-
-        String defaultPwdKey = "default.pwd";
-        String defaultPwdValue = "my-password";
-        register.addProperty(prop(defaultPwdKey, defaultPwdValue));
-
-        String defaultDomainKey = "default.domain";
-        String defaultDomainValue = "http://domain.com";
-        register.addProperty(prop(defaultDomainKey, defaultDomainValue));
-
-        String servicePwdKey = "service.pwd";
-        String servicePwdValue = "${" + defaultPwdKey + "}";
-        register.addProperty(prop(servicePwdKey, servicePwdValue));
-
-        String servicePathKey = "service.path";
-        String servicePathValue = "my-path";
-        register.addProperty(prop(servicePathKey, servicePathValue));
-
-        String serviceUrlKey = "service.url";
-        String serviceUrlValue = "${" + defaultDomainKey + "}/${" + servicePathKey + "}";
-        register.addProperty(prop(serviceUrlKey, serviceUrlValue));
+        Register<SimpleProperty> register = PropertiesFactory.expressionsRegister();
 
         // When
-        Register<EvaluatedProperty> result = ValueParser.evaluateProperties(register.build());
+        Register<EvaluatedProperty> result = ValueParser.evaluateProperties(register);
 
         // Then
         assertThat(result)
                 .extracting("key", "rawValue", "interpretedValue")
                 .containsOnlyOnce(
-                        tuple(defaultPwdKey, defaultPwdValue, defaultPwdValue),
-                        tuple(defaultDomainKey, defaultDomainValue, defaultDomainValue),
-                        tuple(servicePwdKey, servicePwdValue, defaultPwdValue),
-                        tuple(servicePathKey, servicePathValue, servicePathValue),
-                        tuple(serviceUrlKey, serviceUrlValue, defaultDomainValue + "/" + servicePathValue)
+                        tuple("default.pwd", "my-password", "my-password"),
+                        tuple("default.domain", "http://domain.com", "http://domain.com"),
+                        tuple("service.pwd", "${default.pwd}", "my-password"),
+                        tuple("service.path", "my-path", "my-path"),
+                        tuple("service.url", "${default.domain}/${service.path}", "http://domain.com/my-path")
                 );
-    }
-
-    private static SimpleProperty prop(@Nonnull String key, String value) {
-        return new SimpleProperty(key, value);
     }
 }
