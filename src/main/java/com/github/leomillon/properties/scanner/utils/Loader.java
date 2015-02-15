@@ -5,11 +5,14 @@ import com.github.leomillon.properties.scanner.PropFile;
 import com.github.leomillon.properties.scanner.Register;
 import com.github.leomillon.properties.scanner.SimpleProperty;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public final class Loader {
 
@@ -17,7 +20,8 @@ public final class Loader {
         // Prevent instanciation
     }
 
-    public static HierarchicalRegister<SimpleProperty> loadProperties(String... filePaths) throws IOException {
+    @Nonnull
+    public static HierarchicalRegister<SimpleProperty> loadPropertiesInOrder(String... filePaths) throws IOException {
 
         HierarchicalRegister.Builder<SimpleProperty> hierarchycalRegisterBuilder = HierarchicalRegister.builder();
         int index = 0;
@@ -25,24 +29,35 @@ public final class Loader {
             File file = new File(filePath);
             PropFile propertiesFile = new PropFile(String.valueOf(index++), file.getName());
             try (FileInputStream fileIS = new FileInputStream(file)) {
-                hierarchycalRegisterBuilder.addNextRegisterForFile(loadPropertiesFromInput(fileIS), propertiesFile);
+                hierarchycalRegisterBuilder.addNextRegisterForFile(toRegister(fileIS), propertiesFile);
             }
         }
         return hierarchycalRegisterBuilder.build();
     }
 
-    private static Register<SimpleProperty> loadPropertiesFromInput(FileInputStream fileIS) throws IOException {
+    @Nonnull
+    public static Register<SimpleProperty> toRegister(@Nonnull InputStream inputStream) throws IOException {
 
-            Properties props = new Properties();
-            props.load(fileIS);
+        Properties props = new Properties();
+        props.load(inputStream);
 
-            Register.Builder<SimpleProperty> register = Register.builder();
-            for (Map.Entry<Object, Object> propEntry : props.entrySet()) {
-                register.addProperty(
-                        new SimpleProperty(String.valueOf(propEntry.getKey()), String.valueOf(propEntry.getValue()))
-                );
-            }
-            return register.build();
+        return toRegister(props);
+    }
+
+    @Nonnull
+    public static Register<SimpleProperty> toRegister(@Nonnull Properties props) {
+        return toRegister(props.entrySet());
+    }
+
+    @Nonnull
+    public static Register<SimpleProperty> toRegister(@Nonnull Set<Map.Entry<Object, Object>> entries) {
+        Register.Builder<SimpleProperty> register = Register.builder();
+        for (Map.Entry<Object, Object> propEntry : entries) {
+            register.addProperty(
+                    new SimpleProperty(String.valueOf(propEntry.getKey()), String.valueOf(propEntry.getValue()))
+            );
+        }
+        return register.build();
     }
 
 }

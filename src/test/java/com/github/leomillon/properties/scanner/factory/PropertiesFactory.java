@@ -27,7 +27,7 @@ public final class PropertiesFactory {
     }
 
     public static HierarchicalRegister<SimpleProperty> createRegisterFromFiles(String... filePathes) throws IOException {
-        return Loader.loadProperties(filePathes);
+        return Loader.loadPropertiesInOrder(filePathes);
     }
 
 }
