@@ -15,7 +15,12 @@ public class HistorizedProperty implements Property {
     public enum State {
         UNIQUE,
         OVERRIDEN,
-        DUPLICATED
+        DUPLICATED;
+
+        @Nonnull
+        public String getCode() {
+            return this.name();
+        }
     }
 
     @Nonnull
@@ -57,6 +62,7 @@ public class HistorizedProperty implements Property {
         return (o1, o2) -> Integer.compare(filesOrder.indexOf(o1), filesOrder.indexOf(o2));
     }
 
+    @Nonnull
     public State getState() {
         if (values.size() == 1) {
             return State.UNIQUE;
