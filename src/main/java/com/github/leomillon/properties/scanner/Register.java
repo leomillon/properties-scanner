@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableSet;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -39,12 +40,17 @@ public class Register<T extends Property> implements Iterable<T> {
 
     @Nonnull
     public Set<T> getProperties() {
-        return ImmutableSet.copyOf(properties.values());
+        return ImmutableSet.copyOf(getSortedProperties());
     }
 
     @Override
     public Iterator<T> iterator() {
-        return properties.values().iterator();
+        return getSortedProperties().iterator();
+    }
+
+    @Nonnull
+    private List<T> getSortedProperties() {
+        return PropertyOrdering.keyInNaturalOrder().immutableSortedCopy(properties.values());
     }
 
     @Override
