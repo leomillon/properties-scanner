@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
@@ -40,7 +41,9 @@ public class LoaderTest {
         String secondFilePath = getFilePath(SECOND_PROP_FILE_NAME);
 
         // When
-        HierarchicalRegister<SimpleProperty> result = Loader.loadPropertiesInOrder(firstFilePath, secondFilePath);
+        HierarchicalRegister<SimpleProperty> result = Loader.loadPropertiesInOrder(
+                Arrays.asList(firstFilePath, secondFilePath)
+        );
 
         // Then
         assertThat(result).isNotNull();

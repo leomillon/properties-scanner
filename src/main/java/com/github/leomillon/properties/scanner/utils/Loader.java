@@ -21,7 +21,8 @@ public final class Loader {
     }
 
     @Nonnull
-    public static HierarchicalRegister<SimpleProperty> loadPropertiesInOrder(String... filePaths) throws IOException {
+    public static HierarchicalRegister<SimpleProperty> loadPropertiesInOrder(Iterable<String> filePaths)
+            throws IOException {
 
         HierarchicalRegister.Builder<SimpleProperty> hierarchycalRegisterBuilder = HierarchicalRegister.builder();
         int index = 0;

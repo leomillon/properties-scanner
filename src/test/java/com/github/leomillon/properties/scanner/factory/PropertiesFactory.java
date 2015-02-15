@@ -7,6 +7,7 @@ import com.github.leomillon.properties.scanner.utils.Loader;
 import com.google.common.io.Resources;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public final class PropertiesFactory {
 
@@ -27,7 +28,7 @@ public final class PropertiesFactory {
     }
 
     public static HierarchicalRegister<SimpleProperty> createRegisterFromFiles(String... filePathes) throws IOException {
-        return Loader.loadPropertiesInOrder(filePathes);
+        return Loader.loadPropertiesInOrder(Arrays.asList(filePathes));
     }
 
 }
