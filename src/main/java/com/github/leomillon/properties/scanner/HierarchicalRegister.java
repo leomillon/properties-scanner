@@ -30,6 +30,11 @@ public class HierarchicalRegister<T extends Property> {
     }
 
     @Nonnull
+    public List<PropFile> getFilesOrder() {
+        return ImmutableList.copyOf(filesOrder);
+    }
+
+    @Nonnull
     public Register<T> getFinalRegister() {
         Register.Builder<T> finalRegister = Register.builder();
         for (PropFile propFile : filesOrder) {
