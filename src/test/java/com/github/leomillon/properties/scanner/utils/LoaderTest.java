@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.github.leomillon.properties.scanner.factory.PropertiesFactory.*;
 import static org.assertj.core.api.Assertions.*;
 
 public class LoaderTest {
@@ -42,7 +43,7 @@ public class LoaderTest {
 
         // When
         HierarchicalRegister<SimpleProperty> result = Loader.loadPropertiesInOrder(
-                Arrays.asList(firstFilePath, secondFilePath)
+                filePathsToDescriptors(firstFilePath, secondFilePath)
         );
 
         // Then

@@ -3,11 +3,15 @@ package com.github.leomillon.properties.scanner.factory;
 import com.github.leomillon.properties.scanner.HierarchicalRegister;
 import com.github.leomillon.properties.scanner.Register;
 import com.github.leomillon.properties.scanner.SimpleProperty;
+import com.github.leomillon.properties.scanner.descriptor.PropFileDescriptor;
+import com.github.leomillon.properties.scanner.descriptor.PropFilePathDescriptor;
 import com.github.leomillon.properties.scanner.utils.Loader;
 import com.google.common.io.Resources;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public final class PropertiesFactory {
 
@@ -27,8 +31,15 @@ public final class PropertiesFactory {
         return Resources.getResource(fileName).getPath();
     }
 
-    public static HierarchicalRegister<SimpleProperty> createRegisterFromFiles(String... filePathes) throws IOException {
-        return Loader.loadPropertiesInOrder(Arrays.asList(filePathes));
+    public static HierarchicalRegister<SimpleProperty> createRegisterFromFiles(String... filePaths) throws IOException {
+        return Loader.loadPropertiesInOrder(filePathsToDescriptors(filePaths));
+    }
+
+    @Nonnull
+    public static Iterable<PropFileDescriptor> filePathsToDescriptors(String... filePaths) {
+        return Arrays.stream(filePaths)
+                .map(PropFilePathDescriptor::new)
+                .collect(Collectors.toList());
     }
 
 }
